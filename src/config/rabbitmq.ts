@@ -1,5 +1,19 @@
 import amqplib from "amqplib";
 
+export const NotificationQueue = {
+  Email: "notifications.email",
+  SMS: "notifications.sms",
+  Push: "notifications.push",
+};
+
+export interface INotificationEmail {
+  TemplateId: string;
+  Email: string;
+  Name: string;
+  Subject: string;
+  Message: string;
+}
+
 export class RabbitMQ {
   private url: string | null = null;
   private connection: amqplib.Connection | null = null;
@@ -33,24 +47,6 @@ export class RabbitMQ {
   async Disconnect(): Promise<void> {
     if (this.connection) {
       this.connection.close();
-    }
-  }
-
-  async AssertQueue(queue: string): Promise<void> {
-    try {
-      await this.Connect();
-
-      const channel = await this.GetChannel();
-
-      await channel?.assertQueue(queue, { durable: true });
-      console.log(`Fila "${queue}" criada com sucesso!`);
-
-      await channel?.close();
-      process.exit(0);
-    } catch (e: any) {
-      console.error("Erro na queue do RabbitMQ", e.message);
-      process.exit(1);
-      //throw e;
     }
   }
 }
