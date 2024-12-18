@@ -14,8 +14,6 @@ export class NotificationProducer {
       await channel?.assertQueue(queue, { durable: true });
 
       channel?.sendToQueue(queue, messageBuffer);
-
-      console.log(`Mensagem enviada para a fila "${queue}":`, message);
     } catch (e: any) {
       console.error("Erro ao enviar mensagem para a fila:", e.message);
     } finally {

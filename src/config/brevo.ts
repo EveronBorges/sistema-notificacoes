@@ -1,6 +1,6 @@
 import * as brevo from "@getbrevo/brevo";
 
-export class BrevoConnection {
+export class Brevo {
   private apiInstance: brevo.TransactionalEmailsApi;
   private sendSmtpEmail: brevo.SendSmtpEmail;
 

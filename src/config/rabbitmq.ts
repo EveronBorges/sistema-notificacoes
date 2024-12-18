@@ -1,19 +1,5 @@
 import amqplib from "amqplib";
 
-export const NotificationQueue = {
-  Email: "notifications.email",
-  SMS: "notifications.sms",
-  Push: "notifications.push",
-};
-
-export interface INotificationEmail {
-  TemplateId: string;
-  Email: string;
-  Name: string;
-  Subject: string;
-  Message: string;
-}
-
 export class RabbitMQ {
   private url: string | null = null;
   private connection: amqplib.Connection | null = null;

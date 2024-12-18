@@ -1,3 +1,4 @@
+/*
 import { NotificationProducer } from "./events/producers/notification.producer";
 import { INotificationEmail, NotificationQueue } from "./config/rabbitmq";
 import moment from "moment";
@@ -17,8 +18,9 @@ import dotenv from "dotenv";
   } as INotificationEmail;
 
   await NotificationProducer.SendNotificationToQueue(
-    NotificationQueue.Email,
+    NotificationQueue.Websocket,
     message
   );
-  process.exit(0);
+  //process.exit(0);
 })();
+*/

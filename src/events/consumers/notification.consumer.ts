@@ -1,9 +1,10 @@
-import { BrevoConnection } from "../../config/brevo";
+import { Brevo } from "../../config/brevo";
+import { RabbitMQ } from "../../config/rabbitmq";
+import { WebSocketIO } from "../../config/socket";
 import {
-  RabbitMQ,
   NotificationQueue,
-  INotificationEmail,
-} from "../../config/rabbitmq";
+  NotificationEmail,
+} from "../../models/notification.model";
 
 export class NotificationConsumer {
   static async Start(queue: string): Promise<void> {
@@ -40,15 +41,18 @@ export class NotificationConsumer {
   static async Process(queue: string, content: any): Promise<void> {
     switch (queue) {
       case NotificationQueue.Email:
-        const { Email, Name, Subject, Message } = content as INotificationEmail;
+        const { Email, Name, Subject, Message } = content as NotificationEmail;
 
-        const brevo = new BrevoConnection();
+        const brevo = new Brevo();
         await brevo.SendEmail({ email: Email, name: Name }, Subject, Message);
 
         break;
       case NotificationQueue.SMS:
         break;
       case NotificationQueue.Push:
+        break;
+      case NotificationQueue.Websocket:
+        await WebSocketIO.ProcessNotification(JSON.stringify(content));
         break;
     }
 

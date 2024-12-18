@@ -1,3 +1,4 @@
+/*
 import { NotificationConsumer } from "./events/consumers/notification.consumer";
 import { NotificationQueue } from "./config/rabbitmq";
 import dotenv from "dotenv";
@@ -7,3 +8,4 @@ import dotenv from "dotenv";
 
   await NotificationConsumer.Start(NotificationQueue.Email);
 })();
+*/
