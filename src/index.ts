@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import notificationRoutes from "./routes/notification.route";
 import { NotificationConsumer } from "./events/consumers/notification.consumer";
 import { NotificationQueue } from "./models/notification.model";
+import logger from "./config/logger";
 
 dotenv.config();
 
@@ -24,5 +25,5 @@ WebSocketIO.Initialize(server);
 })();
 
 server.listen(3000, () => {
-  console.log("Server está rodando em http://localhost:3000");
+  logger.info("Server está rodando em http://localhost:3000");
 });

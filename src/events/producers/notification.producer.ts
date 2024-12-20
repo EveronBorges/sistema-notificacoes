@@ -1,3 +1,4 @@
+import logger from "../../config/logger";
 import { RabbitMQ } from "../../config/rabbitmq";
 
 export class NotificationProducer {
@@ -14,8 +15,10 @@ export class NotificationProducer {
       await channel?.assertQueue(queue, { durable: true });
 
       channel?.sendToQueue(queue, messageBuffer);
+
+      logger.info("Mensagem enviada para a fila: ", queue);
     } catch (e: any) {
-      console.error("Erro ao enviar mensagem para a fila:", e.message);
+      logger.error("Erro ao enviar mensagem para a fila:", e.message);
     } finally {
       await channel?.close();
       await rabbitMQ.Disconnect();

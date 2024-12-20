@@ -1,4 +1,5 @@
 import * as brevo from "@getbrevo/brevo";
+import logger from "./logger";
 
 export class Brevo {
   private apiInstance: brevo.TransactionalEmailsApi;
@@ -37,8 +38,12 @@ export class Brevo {
       ];
 
       await this.apiInstance.sendTransacEmail(this.sendSmtpEmail);
+
+      logger.info(
+        `E-mail enviado com sucesso de ${senderEmail} para ${emailTo.email}`
+      );
     } catch (e: any) {
-      console.error(e);
+      logger.error(e.message);
     }
   }
 }

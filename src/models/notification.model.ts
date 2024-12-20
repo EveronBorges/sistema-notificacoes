@@ -13,7 +13,8 @@ export interface NotificationEmail {
 }
 
 export interface NotificationWebSocket {
-  User: string;
+  From: string;
+  To: string | null;
   Title: string;
   Message: string;
 }

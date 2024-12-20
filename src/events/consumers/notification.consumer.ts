@@ -1,4 +1,5 @@
 import { Brevo } from "../../config/brevo";
+import logger from "../../config/logger";
 import { RabbitMQ } from "../../config/rabbitmq";
 import { WebSocketIO } from "../../config/socket";
 import {
@@ -14,7 +15,8 @@ export class NotificationConsumer {
     try {
       await channel?.assertQueue(queue, { durable: true });
 
-      console.log(`Aguardando mensagens na fila "${queue}"...`);
+      logger.info(`Iniciando a fila ${queue}`);
+      logger.info(`Aguardando mensagens na fila "${queue}"...`);
 
       channel?.consume(
         queue,
@@ -22,7 +24,7 @@ export class NotificationConsumer {
           if (message) {
             const content = JSON.parse((message?.content || "").toString());
 
-            console.log("Mensagem recebida:", content);
+            logger.info(`Mensagem recebida para a fila: ${queue}`);
 
             await this.Process(queue, content);
 
@@ -32,7 +34,7 @@ export class NotificationConsumer {
         { noAck: false }
       );
     } catch (e: any) {
-      console.error("Erro no consumer", e.message);
+      logger.error(`Erro no consumer : ${e.message}`);
       await channel?.close();
       await rabbitMQ.Disconnect();
     }
@@ -52,7 +54,8 @@ export class NotificationConsumer {
       case NotificationQueue.Push:
         break;
       case NotificationQueue.Websocket:
-        await WebSocketIO.ProcessNotification(JSON.stringify(content));
+        await WebSocketIO.ProcessNotification(content);
+
         break;
     }
 

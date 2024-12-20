@@ -1,4 +1,5 @@
 import amqplib from "amqplib";
+import logger from "./logger";
 
 export class RabbitMQ {
   private url: string | null = null;
@@ -16,8 +17,11 @@ export class RabbitMQ {
 
       if (!this.connection) {
         this.connection = await amqplib.connect(this.url);
+
+        logger.info("RabbitMQ conectado com sucesso.");
       }
     } catch (e: any) {
+      logger.error(`Ocorreu um erro ao conectar ao RabbitMQ: ${e.message}`);
       throw e;
     }
   }
@@ -25,14 +29,13 @@ export class RabbitMQ {
   async GetChannel(): Promise<amqplib.Channel | undefined> {
     await this.Connect();
 
-    const channel = await this.connection?.createChannel();
-
-    return channel;
+    return await this.connection?.createChannel();
   }
 
   async Disconnect(): Promise<void> {
     if (this.connection) {
       this.connection.close();
+      logger.info("RabbitMQ desconectado.");
     }
   }
 }

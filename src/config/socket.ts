@@ -1,12 +1,15 @@
 import { Server } from "socket.io";
 import http from "http";
+import { NotificationWebSocket } from "../models/notification.model";
+import logger from "./logger";
 
 export class WebSocketIO {
   private static io: Server | null = null;
+  private static userSocketMap = new Map<string, string>();
 
   static Initialize(server: http.Server): void {
     try {
-      console.log("Socket inicializado");
+      logger.info("Socket inicializado");
 
       this.io = new Server(server, {
         cors: {
@@ -16,14 +19,20 @@ export class WebSocketIO {
       });
 
       this.io.on("connection", s => {
-        console.log(`Cliente conectado: ${s.id}`);
+        const usuario = s.handshake.query.usuario as string;
+
+        if (usuario) {
+          this.userSocketMap.set(usuario, s.id);
+        }
+        logger.info(`Cliente conectado: usuário: ${usuario}`);
 
         s.on("disconnect", () => {
-          console.log(`Cliente disconectado: ${s.id}`);
+          this.userSocketMap.delete(usuario);
+          logger.info(`Cliente disconectado: usuário: ${usuario}`);
         });
       });
     } catch (e: any) {
-      console.error(e);
+      logger.error(e.message);
     }
   }
 
@@ -35,17 +44,32 @@ export class WebSocketIO {
     return this.io;
   }
 
-  static async ProcessNotification(notification: any): Promise<void> {
+  static async ProcessNotification(
+    notification: NotificationWebSocket
+  ): Promise<void> {
     try {
-      console.log("Entrou");
-
       const io = this.GetSocketIO();
 
-      io.emit("notification", notification);
+      const notificationJson = JSON.stringify(notification);
+      const id = this.userSocketMap.get(notification.To || "");
 
-      console.log("Notificação enviada via WebSocket:", notification);
+      //O usuário foi enviado mas não está conectado
+      if (!id && notification.To)
+        throw new Error("Usuário de destino não está conectado");
+
+      if (id) {
+        io.to(id).emit("notification", notificationJson);
+        logger.info(
+          `Websocket enviada de ${notification.From} para ${notification.To} com sucesso!`
+        );
+      } else {
+        io.emit("notification", notificationJson);
+        logger.info(
+          `Websocket enviada de ${notification.From} para todos com sucesso!`
+        );
+      }
     } catch (e: any) {
-      console.log(e);
+      logger.error(e.message);
     }
   }
 }
