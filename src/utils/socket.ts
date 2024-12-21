@@ -1,7 +1,7 @@
 import { Server } from "socket.io";
 import http from "http";
 import { NotificationWebSocket } from "../models/notification.model";
-import logger from "./logger";
+import logger from "../config/logger";
 
 export class WebSocketIO {
   private static io: Server | null = null;

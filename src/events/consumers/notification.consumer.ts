@@ -1,7 +1,7 @@
-import { Brevo } from "../../config/brevo";
+import { Brevo } from "../../utils/brevo";
 import logger from "../../config/logger";
-import { RabbitMQ } from "../../config/rabbitmq";
-import { WebSocketIO } from "../../config/socket";
+import { RabbitMQ } from "../../utils/rabbitmq";
+import { WebSocketIO } from "../../utils/socket";
 import {
   NotificationQueue,
   NotificationEmail,

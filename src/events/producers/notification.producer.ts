@@ -1,5 +1,5 @@
 import logger from "../../config/logger";
-import { RabbitMQ } from "../../config/rabbitmq";
+import { RabbitMQ } from "../../utils/rabbitmq";
 
 export class NotificationProducer {
   static async SendNotificationToQueue(

@@ -1,5 +1,5 @@
 import amqplib from "amqplib";
-import logger from "./logger";
+import logger from "../config/logger";
 
 export class RabbitMQ {
   private url: string | null = null;

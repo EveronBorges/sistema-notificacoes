@@ -1,5 +1,5 @@
 import { Server } from "http";
-import { WebSocketIO } from "./socket";
+import { WebSocketIO } from "../src/utils/socket";
 import { io as Client } from "socket.io-client";
 
 describe("WebSocketIO", () => {

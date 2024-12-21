@@ -1,6 +1,6 @@
-import { Brevo } from "../config/brevo";
+import { Brevo } from "../src/utils/brevo";
 
-jest.mock("../config/brevo");
+jest.mock("../src/utils/brevo");
 
 const mockSendMail = jest.fn();
 

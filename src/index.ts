@@ -1,7 +1,7 @@
 import express from "express";
 import http from "http";
 import cors from "cors";
-import { WebSocketIO } from "./config/socket";
+import { WebSocketIO } from "./utils/socket";
 import dotenv from "dotenv";
 import notificationRoutes from "./routes/notification.route";
 import { NotificationConsumer } from "./events/consumers/notification.consumer";

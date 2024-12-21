@@ -7,6 +7,6 @@
     "strict": true,
     "esModuleInterop": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "tests/notification.service.test.ts"],
   "exclude": ["node_modules"]
 }

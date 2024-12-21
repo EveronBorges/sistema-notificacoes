@@ -1,5 +1,5 @@
 import * as brevo from "@getbrevo/brevo";
-import logger from "./logger";
+import logger from "../config/logger";
 
 export class Brevo {
   private apiInstance: brevo.TransactionalEmailsApi;
