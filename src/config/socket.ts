@@ -28,7 +28,7 @@ export class WebSocketIO {
 
         s.on("disconnect", () => {
           this.userSocketMap.delete(usuario);
-          logger.info(`Cliente disconectado: usuário: ${usuario}`);
+          logger.info(`Cliente ${usuario} desconectado.`);
         });
       });
     } catch (e: any) {

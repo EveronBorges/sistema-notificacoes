@@ -44,6 +44,7 @@ export class Brevo {
       );
     } catch (e: any) {
       logger.error(e.message);
+      throw e;
     }
   }
 }
