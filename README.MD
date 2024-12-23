@@ -114,13 +114,17 @@ Este é um sistema de notificações em tempo real com suporte a e-mails, WebSoc
 
 ```plaintext
 src/
-├── config/          # Configurações do sistema
-├── controllers/     # Controladores das rotas da API
-├── services/        # Serviços de negócio
-├── models/          # Modelos de dados
-├── utils/           # Utilitários como envio de e-mails e logger
-├── tests/           # Testes automatizados
-└── index.ts         # Ponto de entrada do servidor
+├── config/             # Configurações do sistema
+├── controllers/        # Controladores das rotas da API
+├── events/             # Eventos de envio e recebimento de notificações
+├── middlewares/        # Middleware que valida um usuário e gera o token
+├── models/             # Modelos de dados
+├── routes/             # Rota(s) do endpoint
+├── services/           # Serviços de negócio
+├── utils/              # Utilitários como envio de e-mails e logger
+└── index.ts            # Ponto de entrada do servidor
+tests/                  # Testes automatizados
+└── <arquivo>.test.ts   # Arquivos que possuirão os testes automatizados
 ```
 
 ## Melhorias Futuras
