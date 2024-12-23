@@ -45,19 +45,13 @@ Este é um sistema de notificações em tempo real com suporte a e-mails, WebSoc
 
 ### Inicialização
 
-1. Certifique-se de que o RabbitMQ está em execução:
+1. Inicie o servidor:
 
    ```bash
-   rabbitmq-server
+   npm run serve
    ```
 
-2. Inicie o servidor:
-
-   ```bash
-   npm run dev
-   ```
-
-3. O sistema estará disponível em `http://localhost:3000`.
+2. O sistema estará disponível em `http://localhost:3000`.
 
 ## Endpoints da API
 
@@ -79,6 +73,7 @@ Este é um sistema de notificações em tempo real com suporte a e-mails, WebSoc
   }
   ```
 
+- **Descrição:** Envia uma notificação via websocket para um destinatário ou para todos usuários conectados.
 - **Payload: Websocket**
 
   ```json
