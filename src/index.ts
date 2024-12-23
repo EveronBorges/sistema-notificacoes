@@ -3,7 +3,8 @@ import http from "http";
 import cors from "cors";
 import { WebSocketIO } from "./utils/socket";
 import dotenv from "dotenv";
-import notificationRoutes from "./routes/notification.route";
+import authRoutes from "./routes/auth.routes";
+import notificationRoutes from "./routes/notification.routes";
 import { NotificationConsumer } from "./events/consumers/notification.consumer";
 import { NotificationQueue } from "./models/notification.model";
 import logger from "./config/logger";
@@ -15,7 +16,7 @@ const server = http.createServer(app);
 
 app.use(cors());
 app.use(express.json());
-app.use("/api", [notificationRoutes]);
+app.use("/api", [authRoutes, notificationRoutes]);
 
 WebSocketIO.Initialize(server);
 
