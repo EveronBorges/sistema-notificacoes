@@ -1,12 +1,15 @@
 import amqplib from "amqplib";
 import logger from "../config/logger";
+import dotenv from "dotenv";
 
 export class RabbitMQ {
   private url: string | null = null;
   private connection: amqplib.Connection | null = null;
 
-  constructor() {
-    this.url = process.env.RABBITMQ_URL || "";
+  constructor(url: string | null = null) {
+    dotenv.config();
+
+    this.url = url ?? (process.env.RABBITMQ_URL || "");
   }
 
   async Connect(): Promise<void> {

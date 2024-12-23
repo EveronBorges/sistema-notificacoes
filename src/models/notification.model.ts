@@ -3,6 +3,7 @@ export class NotificationQueue {
   public static readonly SMS: string = "notifications.sms";
   public static readonly Push: string = "notifications.push";
   public static readonly Websocket: string = "notifications.websocket";
+  public static readonly Test: string = "notifications.test";
 }
 
 export interface NotificationEmail {

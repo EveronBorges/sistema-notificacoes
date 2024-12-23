@@ -6,19 +6,26 @@ import {
   NotificationQueue,
   NotificationEmail,
 } from "../../models/notification.model";
+import amqplib from "amqplib";
 
 export class NotificationConsumer {
-  static async Start(queue: string): Promise<void> {
-    const rabbitMQ = new RabbitMQ();
-    const channel = await rabbitMQ.GetChannel();
+  private rabbitMQ: RabbitMQ;
+  private channel: amqplib.Channel | undefined;
+  private isChannelClosed: boolean = false;
 
+  constructor() {
+    this.rabbitMQ = new RabbitMQ();
+  }
+
+  async Start(queue: string): Promise<void> {
     try {
-      await channel?.assertQueue(queue, { durable: true });
+      this.channel = await this.rabbitMQ.GetChannel();
+      await this.channel?.assertQueue(queue, { durable: true });
 
       logger.info(`Iniciando a fila ${queue}`);
       logger.info(`Aguardando mensagens na fila "${queue}"...`);
 
-      channel?.consume(
+      this.channel?.consume(
         queue,
         async message => {
           if (message) {
@@ -28,19 +35,45 @@ export class NotificationConsumer {
 
             await this.Process(queue, content);
 
-            channel.ack(message);
+            if (this.channel && !this.isChannelClosed) {
+              this.channel?.ack(message);
+            }
           }
         },
         { noAck: false }
       );
     } catch (e: any) {
       logger.error(`Erro no consumer : ${e.message}`);
-      await channel?.close();
-      await rabbitMQ.Disconnect();
+      await this.channel?.close();
+      await this.rabbitMQ.Disconnect();
     }
   }
 
-  static async Process(queue: string, content: any): Promise<void> {
+  async Stop(queue: string): Promise<void> {
+    try {
+      logger.info(`Parando a fila ${queue}`);
+
+      if (this.channel) {
+        await this.channel.cancel(queue);
+
+        try {
+          await this.channel.checkQueue(queue);
+          await this.channel.deleteQueue(queue);
+          await this.channel.close();
+
+          this.isChannelClosed = true;
+        } catch (e: any) {
+          logger.info(e.message);
+        }
+      }
+
+      await this.rabbitMQ.Disconnect();
+    } catch (e: any) {
+      logger.error(`Erro ao parar a fila: ${e.message}`);
+    }
+  }
+
+  async Process(queue: string, content: any): Promise<void> {
     switch (queue) {
       case NotificationQueue.Email:
         const { Email, Name, Subject, Message } = content as NotificationEmail;
@@ -55,7 +88,12 @@ export class NotificationConsumer {
         break;
       case NotificationQueue.Websocket:
         await WebSocketIO.ProcessNotification(content);
-
+        break;
+      case NotificationQueue.Test:
+        logger.info("Queue de teste");
+        break;
+      default:
+        logger.warn("Queue não encontrada");
         break;
     }
 

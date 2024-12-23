@@ -20,8 +20,10 @@ app.use("/api", [notificationRoutes]);
 WebSocketIO.Initialize(server);
 
 (async () => {
-  await NotificationConsumer.Start(NotificationQueue.Email);
-  await NotificationConsumer.Start(NotificationQueue.Websocket);
+  const notificationConsumer = new NotificationConsumer();
+
+  await notificationConsumer.Start(NotificationQueue.Email);
+  await notificationConsumer.Start(NotificationQueue.Websocket);
 })();
 
 server.listen(3000, () => {
