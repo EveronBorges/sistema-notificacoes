@@ -20,6 +20,7 @@ export class NotificationProducer {
     } catch (e: any) {
       logger.error("Erro ao enviar mensagem para a fila:", e.message);
     } finally {
+      //await channel?.connection.close();
       await channel?.close();
       await rabbitMQ.Disconnect();
     }

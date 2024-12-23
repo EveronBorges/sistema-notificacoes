@@ -3,7 +3,7 @@ import { NotificationService } from "../services/notification.service";
 
 const router = Router();
 
-router.post("/enviar", async (req: Request, res: Response) => {
+router.post("/notifications/enviar", async (req: Request, res: Response) => {
   try {
     await NotificationService.Create(req.body);
 
